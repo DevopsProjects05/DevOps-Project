@@ -1,10 +1,4 @@
-data "aws_ami" "amazon-linux" {
-  most_recent = true
 
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-kernel-5.10-hvm-*-x86_64-gp2"]
-  }
 
   filter {
     name   = "virtualization-type"
@@ -13,9 +7,9 @@ data "aws_ami" "amazon-linux" {
 }
 
 resource "aws_instance" "dev_machine" {
-  ami = data.aws_ami.amazon-linux.id
+  ami = "ami-0df8c184d5f6ae949"
   instance_type = "t2.micro"
-  key_name = "euran-jenkins"
+  key_name = "Devsecops"
 
   tags = {
     Environment = "dev"
