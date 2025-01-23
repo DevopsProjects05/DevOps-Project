@@ -1,6 +1,6 @@
 - name: This sets up an httpd webserver
   hosts: aws_ec2
-  become: yes
+  become: ec2-user
   remote_user: ec2-user
   gather_facts: true
   vars:
