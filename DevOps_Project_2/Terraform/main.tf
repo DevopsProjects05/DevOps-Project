@@ -1,10 +1,6 @@
 
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
+ 
 
 resource "aws_instance" "dev_machine" {
   ami = "ami-0df8c184d5f6ae949"
