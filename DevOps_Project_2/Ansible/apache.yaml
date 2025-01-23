@@ -4,29 +4,39 @@
   remote_user: ec2-user
   gather_facts: true
   vars:
-    ansible_ssh_private_key_file: "/etc/ansible/euran-jenkins.pem"  
+    ansible_ssh_private_key_file: "/etc/ansible/Devsecops.pem"  
     ansible_ssh_user: "ec2-user"
   tasks:
-  - name: "Install httpd and php packages"
-    package:
-        name:
-          - "httpd"
-          - "php"
+    - name: Update package repository
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+      when: ansible_os_family == "RedHat"
+
+    - name: Install NGINX
+      ansible.builtin.yum:
+        name: nginx
         state: present
-  - name: "copy code from GitHub"
-    get_url:
-        url: https://www.shubhammishra.in
-        dest: "/var/www/html/index.php"
-  - name: "Start httpd services"
-    service:
-        name: httpd
+      when: ansible_os_family == "RedHat"
+
+    - name: Update apt package repository
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install NGINX
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Start NGINX service
+      ansible.builtin.service:
+        name: nginx
         state: started
-  - name: Yum Install Packages
-    yum: name={{item}} state=latest
-    with_items:
-       - wget
-  - name: terraform install
-    unarchive:
-      src: https://releases.hashicorp.com/terraform/0.9.1/terraform_0.9.1_linux_amd64.zip
-      dest: /usr/bin
-      remote_src: True
+        enabled: yes
+  
+  
+  
+  
+  
